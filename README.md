@@ -11,7 +11,7 @@ Apache 2.0 - see LICENSE
 * NuGet Package Manager with "Allow NuGet to download missing packages" setting enabled
 
 ### SYNTAX
-`ChocolateStore \<directory\> \<url\>`
+`ChocolateStore <directory> <url>`
 
 ### EXAMPLE
 In this example, we will store the latest version of GoogleChrome on a network share and install it from a client on the LAN.
