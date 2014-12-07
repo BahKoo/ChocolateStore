@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -20,9 +21,9 @@ namespace ChocolateStore
 		{
 			var packagePath = DownloadFile(url, dir);
 
-			using (var zip = ZipFile.Read(packagePath)) {
-
-				var entry = zip.FirstOrDefault(x => x.FileName == INSTALL_FILE);
+			using (var zip = ZipFile.Read(packagePath))
+			{
+			    var entry = zip.FirstOrDefault(x => string.Equals(x.FileName, INSTALL_FILE, StringComparison.OrdinalIgnoreCase));
 
 				if (entry != null) {
 					string content = null;
