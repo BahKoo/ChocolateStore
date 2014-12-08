@@ -11,8 +11,9 @@ namespace ChocolateStore
 
             PackageCacher cacher = new PackageCacher();
 
-            cacher.DownloadingFile += cacher_DownloadingFile;
             cacher.SkippingFile += cacher_SkippingFile;
+            cacher.DownloadingFile += cacher_DownloadingFile;
+            cacher.DownloadFailed += cacher_DownloadFailed;
 
             try
             {
@@ -62,14 +63,20 @@ namespace ChocolateStore
 
         }
 
+        private static void cacher_SkippingFile(string fileName)
+        {
+            WriteWarning("Skipped: {0} - File already exists on disk.", fileName);
+        }
+
         private static void cacher_DownloadingFile(string fileName)
         {
             WriteInfo("Downloading: {0}", fileName);
         }
 
-        private static void cacher_SkippingFile(string fileName)
+        private static void cacher_DownloadFailed(string url, Exception ex)
         {
-            WriteWarning("Skipped: {0} - File already exists on disk.", fileName);
+            WriteError("Download Failed: {0}", url);
+            Console.WriteLine(ex.ToString());
         }
 
         private static void WriteInfo(string format, params object[] arg)
