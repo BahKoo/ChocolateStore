@@ -26,7 +26,7 @@ namespace ChocolateStore
             }
             catch (Exception ex)
             {
-                Console.Write(ex.ToString());
+                WriteError(ex.ToString());
             }
 
         }
@@ -38,7 +38,7 @@ namespace ChocolateStore
 
             if (args.Length != 2)
             {
-                Console.WriteLine("USAGE: ChocolateStore <directory> <url>");
+                WriteError("USAGE: ChocolateStore <directory> <url>");
                 return null;
             }
 
@@ -46,7 +46,7 @@ namespace ChocolateStore
 
             if (!Directory.Exists(arguments.Directory))
             {
-                Console.WriteLine("Directory '{0}' does not exist.", arguments.Directory);
+                WriteError("Directory '{0}' does not exist.", arguments.Directory);
                 return null;
             }
 
@@ -54,7 +54,7 @@ namespace ChocolateStore
 
             if (!Uri.IsWellFormedUriString(arguments.Url, UriKind.Absolute))
             {
-                Console.WriteLine("URL '{0}' is invalid.", arguments.Url);
+                WriteError("URL '{0}' is invalid.", arguments.Url);
                 return null;
             }
 
@@ -64,12 +64,33 @@ namespace ChocolateStore
 
         private static void cacher_DownloadingFile(string fileName)
         {
-            Console.WriteLine("Storing: {0}", fileName);
+            WriteInfo("Downloading: {0}", fileName);
         }
 
         private static void cacher_SkippingFile(string fileName)
         {
-            Console.WriteLine("Skipping: {0}", fileName);
+            WriteWarning("Skipped: {0} - File already exists on disk.", fileName);
+        }
+
+        private static void WriteInfo(string format, params object[] arg)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(format, arg);
+            Console.ResetColor();
+        }
+
+        private static void WriteWarning(string format, params object[] arg)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(format, arg);
+            Console.ResetColor();
+        }
+
+        private static void WriteError(string format, params object[] arg)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.WriteLine(format, arg);
+            Console.ResetColor();
         }
 
     }
