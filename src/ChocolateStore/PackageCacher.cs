@@ -50,7 +50,7 @@ namespace ChocolateStore
 		private string CacheUrlFiles(string folder, string content)
 		{
 
-			const string pattern = "(?<=['\"])http\\S*(?=['\"])";
+            const string pattern = "(?<=['\"])http[\\S ]*(?=['\"])";
 
 			if (!Directory.Exists(folder)) {
 				Directory.CreateDirectory(folder);
