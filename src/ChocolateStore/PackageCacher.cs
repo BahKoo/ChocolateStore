@@ -34,8 +34,12 @@ namespace ChocolateStore
 
 					using (MemoryStream ms = new MemoryStream()) {
 						entry.Extract(ms);
-						content = Encoding.UTF7.GetString(ms.ToArray());
-					}
+                        ms.Position = 0;
+                        using (StreamReader reader = new StreamReader(ms, true))
+                        {
+                            content = reader.ReadToEnd();
+                        }
+                    }
 
 					content = CacheUrlFiles(Path.Combine(dir, packageName), content);
 					zip.UpdateEntry(INSTALL_FILE, content);
