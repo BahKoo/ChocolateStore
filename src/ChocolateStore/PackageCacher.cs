@@ -20,7 +20,7 @@ namespace ChocolateStore
 		public event FileHandler DownloadingFile = delegate { };		
 		public event DownloadFailedHandler DownloadFailed = delegate { };
 
-		public void CachePackage(string dir, string url)
+		public void CachePackage(string dir, string url, bool useRelativePaths)
 		{
 			var packagePath = DownloadFile(url, dir);
 
@@ -41,7 +41,7 @@ namespace ChocolateStore
                         }
                     }
 
-					content = CacheUrlFiles(Path.Combine(dir, packageName), content);
+					content = CacheUrlFiles(Path.Combine(dir, packageName), content, useRelativePaths);
 					zip.UpdateEntry(INSTALL_FILE, content);
 					zip.Save();
 
@@ -51,7 +51,7 @@ namespace ChocolateStore
 
 		}
 
-		private string CacheUrlFiles(string folder, string content)
+		private string CacheUrlFiles(string folder, string content, bool useRelativePaths)
 		{
 
             const string pattern = "(?<=['\"])http[\\S ]*(?=['\"])";
@@ -60,11 +60,17 @@ namespace ChocolateStore
 				Directory.CreateDirectory(folder);
 			}
 
-			return Regex.Replace(content, pattern, new MatchEvaluator(m => DownloadFile(m.Value, folder)));
+            var evaluator = new MatchEvaluator(m => {
+                string url = m.Value;
+                string downloadPath = DownloadFile(url, folder);
+                return useRelativePaths ? MakeRelative(downloadPath, folder): downloadPath;
+            });
+
+            return Regex.Replace(content, pattern, evaluator);
 
 		}
 
-		private string DownloadFile(string url, string destination)
+        private string DownloadFile(string url, string destination)
 		{
 
 			try
@@ -95,7 +101,14 @@ namespace ChocolateStore
 				return url;
 			}
 
-		}
+        }
 
-	}
+        private string MakeRelative(string filePath, string referencePath)
+        {
+            var fileUri = new Uri(filePath);
+            var referenceUri = new Uri(referencePath);
+            return referenceUri.MakeRelativeUri(fileUri).ToString();
+        }
+
+    }
 }

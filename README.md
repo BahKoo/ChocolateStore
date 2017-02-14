@@ -11,7 +11,13 @@ Apache 2.0 - see LICENSE
 * NuGet Package Manager with "Allow NuGet to download missing packages" setting enabled
 
 ### SYNTAX
-`ChocolateStore <directory> <url>`
+`ChocolateStore <directory> <url> [options]`
+
+##### OPTIONS:
+ -r,   use relative paths for cached file locations in the nuget package file
+
+- **Absolute Paths (default):** The cache directory **can't** be moved. `cinst` will work from any directory.
+- **Relative Paths:** The cache directory **can** be moved. `cinst` will only work from the cache directory.
 
 ### EXAMPLE
 In this example, we will store the latest version of GoogleChrome on a network share and install it from a client on the LAN.

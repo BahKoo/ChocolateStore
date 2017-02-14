@@ -21,7 +21,7 @@ namespace ChocolateStore
 
                 if (arguments != null)
                 {
-                    cacher.CachePackage(arguments.Directory, arguments.Url);
+                    cacher.CachePackage(arguments.Directory, arguments.Url, arguments.UseRelativePaths);
                 }
 
             }
@@ -37,9 +37,11 @@ namespace ChocolateStore
 
             Arguments arguments = new Arguments();
 
-            if (args.Length != 2)
+            if (args.Length != 2 && args.Length != 3)
             {
-                WriteError("USAGE: ChocolateStore <directory> <url>");
+                WriteError("USAGE: ChocolateStore <directory> <url> [options]");
+                WriteError("options:");
+                WriteError(" -r,   use relative paths instead of absolute paths in package file");
                 return null;
             }
 
@@ -57,6 +59,11 @@ namespace ChocolateStore
             {
                 WriteError("URL '{0}' is invalid.", arguments.Url);
                 return null;
+            }
+
+            if (args.Length > 2 && args[2].Equals("-r"))
+            {
+                arguments.UseRelativePaths = true;
             }
 
             return arguments;
