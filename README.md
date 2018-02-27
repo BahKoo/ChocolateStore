@@ -25,3 +25,6 @@ In this example, we will store the latest version of GoogleChrome on a network s
 3) From a computer that would like to have GoogleChrome installed and from which the current user has "read" permissions to the network share execute the following command:
 
 `cinst GoogleChrome -source M:\Store`
+
+### ALTERNATIVE
+Chocolatey now offers a similar solution to this project with a feature they call ['Package Internalizer'](https://chocolatey.org/docs/features-automatically-recompile-packages). This feature is available in their paid Buisness Edition.
